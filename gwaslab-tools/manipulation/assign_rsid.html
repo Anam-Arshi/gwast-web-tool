@@ -1,0 +1,101 @@
+<div class="tab-pane fade" id="assign_rsid">
+  <h5><i class="fas fa-tag me-2"></i>Assign rsIDs</h5>
+  
+  <!-- Options Form -->
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" id="assignRsidForm" data-task="assign_rsid">
+    <input type="hidden" name="task" value="assign_rsid">
+    
+    <div class="card mb-3">
+      <div class="card-header"><strong>Configuration</strong></div>
+      <div class="card-body">
+        
+        <!-- Genome Build Selection -->
+        <div class="mb-3">
+          <label class="form-label">Genome Build</label>
+          <select name="genome_build" class="form-control" required>
+            <option value="">Select genome build</option>
+            <option value="19">hg19 (GRCh37)</option>
+            <option value="38">hg38 (GRCh38)</option>
+          </select>
+          <small class="text-muted">Choose the genome build that matches your summary statistics</small>
+        </div>
+
+        <!-- Annotation Strategy -->
+        <div class="mb-3">
+          <label class="form-label">Annotation Strategy</label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="use_snpid_table" id="use_snpid_table" checked>
+            <label class="form-check-label" for="use_snpid_table">
+              <strong>Use SNPID-rsID Table</strong> - Quick annotation using curated table (~80M 1KG variants)
+            </label>
+            <small class="text-muted d-block">Fast annotation for common variants using ref_rsid_tsv</small>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="use_dbsnp_vcf" id="use_dbsnp_vcf">
+            <label class="form-check-label" for="use_dbsnp_vcf">
+              <strong>Use dbSNP VCF File</strong> - Full annotation using large reference VCF (>20GB)
+            </label>
+            <small class="text-muted d-block">Comprehensive annotation for rare variants using ref_rsid_vcf</small>
+          </div>
+          <div class="alert alert-info mt-2" style="font-size: 0.9em;">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Tip:</strong> Select both options for maximum annotation coverage. The tool will first use the quick table, then query the VCF for remaining variants.
+          </div>
+        </div>
+
+        <!-- Advanced Options -->
+        <!-- <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" name="overwrite_existing" id="overwrite_existing">
+          <label class="form-check-label" for="overwrite_existing">
+            Overwrite existing rsIDs
+          </label>
+          <small class="text-muted d-block">Replace existing rsIDs in your data</small>
+        </div> -->
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-play me-2"></i>Assign rsIDs
+    </button>
+  </form>
+
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-assign_rsid" class="mt-3" style="display:none;"></div>
+  
+  <!-- Results for this tab -->
+  <div id="result-info-assign_rsid" class="mt-3" style="display:none;"></div>
+  
+  <!-- Logs -->
+  <div id="log-section-assign_rsid" class="mt-3" style="display:none;">
+    <button class="btn btn-sm btn-outline-secondary mb-2" type="button" 
+            onclick="toggleLogs('assign_rsid')">
+      <i class="fas fa-terminal me-2"></i>View Logs
+    </button>
+    <pre id="log-content-assign_rsid" class="bg-dark text-light p-3 rounded" 
+        style="max-height:300px; overflow-y:auto; font-size:0.9em; display:none;"></pre>
+  </div>
+
+      
+      <!-- Download section for this tab -->
+      <!-- Download (ZIP) -->
+      <div id="download-section-assign_rsid" style="display:none;">
+        <div class="card mt-3">
+          <div class="card-body">
+            <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+
+            <button id="download-zip-assign_rsid"
+                    class="btn btn-outline-primary"
+                    type="button"
+                    disabled
+                    onclick="downloadZip(this)"
+                    data-zip="">
+              <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+            </button>
+
+            <small id="zip-size-assign_rsid" class="text-muted d-block mt-2"></small>
+          </div>
+        </div>
+      </div>
+    </div>
+ 

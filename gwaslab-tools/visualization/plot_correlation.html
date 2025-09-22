@@ -1,0 +1,156 @@
+<!-- plot_correlation.html -->
+<div class="tab-pane fade" id="correlation">
+  <h5><i class="fas fa-table me-2"></i>Genetic Correlation Heatmap</h5>
+  <p class="text-muted mb-3">
+    Create a heatmap to visualize genetic correlations from LDSC-rg results between multiple traits. Upload correlation data with trait pairs and p-values.
+  </p>
+  <div class="alert alert-info">
+    <strong>Note:</strong> Your data should contain columns for trait1, trait2, genetic correlation (rg), and p-values. LDSC log files or tabular format are supported.
+  </div>
+
+  <form method="post" action="run_gwaslab_plots.php" class="viz-form" data-task="correlation">
+    <input type="hidden" name="task" value="correlation">
+
+    <!-- Data Configuration -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Data Configuration</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label for="p1_col" class="form-label"><strong>Trait 1 Column</strong></label>
+            <input type="text" class="form-control" id="p1_col" name="p1" value="p1" placeholder="p1">
+            <small class="text-muted">Column name for first trait.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="p2_col" class="form-label"><strong>Trait 2 Column</strong></label>
+            <input type="text" class="form-control" id="p2_col" name="p2" value="p2" placeholder="p2">
+            <small class="text-muted">Column name for second trait.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="rg_col" class="form-label"><strong>Correlation Column</strong></label>
+            <input type="text" class="form-control" id="rg_col" name="rg" value="rg" placeholder="rg">
+            <small class="text-muted">Column name for genetic correlation.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="p_col" class="form-label"><strong>P-value Column</strong></label>
+            <input type="text" class="form-control" id="p_col" name="p" value="p" placeholder="p">
+            <small class="text-muted">Column name for p-values.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Significance Settings -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Significance & Corrections</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="sig_levels" class="form-label"><strong>Significance Levels</strong></label>
+            <input type="text" class="form-control" id="sig_levels" name="sig_levels" value="0.05" placeholder="0.05,0.01">
+            <small class="text-muted">Comma-separated significance thresholds.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="corrections" class="form-label"><strong>Multiple Testing Correction</strong></label>
+            <select class="form-select" id="corrections" name="corrections" multiple>
+              <option value="non" selected>No correction</option>
+              <option value="fdr">FDR (Benjamini-Hochberg)</option>
+              <option value="bon">Bonferroni</option>
+            </select>
+            <small class="text-muted">Hold Ctrl/Cmd to select multiple.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="panno_texts" class="form-label"><strong>Annotation Symbols</strong></label>
+            <input type="text" class="form-control" id="panno_texts" name="panno_texts" value="*,**,***" placeholder="*,**,***">
+            <small class="text-muted">Symbols for significance levels.</small>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+          <div class="col-md-6">
+            <label for="full_cell_method" class="form-label"><strong>Full Cell Method</strong></label>
+            <select class="form-select" id="full_cell_method" name="full_cell_method">
+              <option value="non" selected>No correction</option>
+              <option value="fdr">FDR</option>
+              <option value="bon">Bonferroni</option>
+            </select>
+            <small class="text-muted">Method for determining full cell display.</small>
+          </div>
+          <div class="col-md-6">
+            <label for="full_cell_threshold" class="form-label"><strong>Full Cell Threshold</strong></label>
+            <input type="number" step="any" class="form-control" id="full_cell_threshold" name="full_cell_threshold" value="0.05" placeholder="0.05">
+            <small class="text-muted">Threshold for full cell display.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Settings -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Visual Settings</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="cmap" class="form-label"><strong>Color Map</strong></label>
+            <input type="text" class="form-control" id="cmap" name="cmap" value="RdBu" placeholder="RdBu">
+            <small class="text-muted">Matplotlib colormap name (e.g., RdBu, viridis).</small>
+          </div>
+          <div class="col-md-4">
+            <label for="fontsize" class="form-label"><strong>Font Size</strong></label>
+            <input type="number" min="6" max="20" class="form-control" id="fontsize" name="fontsize" value="10">
+            <small class="text-muted">Font size for labels and annotations.</small>
+          </div>
+          <div class="col-md-4">
+            <div class="form-check mt-4">
+              <input class="form-check-input" type="checkbox" id="panno" name="panno" value="True" checked>
+              <label class="form-check-label" for="panno">
+                <strong>Show Annotations</strong>
+              </label>
+            </div>
+            <small class="text-muted d-block">Display significance symbols on cells.</small>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-2">
+          <div class="col-md-4">
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" id="equal_aspect" name="equal_aspect" value="True" checked>
+              <label class="form-check-label" for="equal_aspect">
+                <strong>Equal Aspect Ratio</strong>
+              </label>
+            </div>
+            <small class="text-muted d-block">Maintain square cells in heatmap.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="dpi" class="form-label"><strong>Resolution (DPI)</strong></label>
+            <input type="number" min="150" max="600" step="50" value="300" class="form-control" id="dpi" name="dpi">
+            <small class="text-muted">Image resolution for output.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="figsize" class="form-label"><strong>Figure Size</strong></label>
+            <input type="text" class="form-control" id="figsize" name="figsize" value="15,15" placeholder="15,15">
+            <small class="text-muted">Width,height in inches.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-start">
+      <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+        <i class="fas fa-table me-2"></i>Generate Correlation Heatmap
+      </button>
+    </div>
+  </form>
+
+  <!-- Processing status -->
+  <div id="processing-status-correlation" class="mt-3" style="display:none;"></div>
+
+  <!-- Plot display -->
+  <div id="plot-display-correlation" class="mt-4"></div>
+
+  <!-- Download section -->
+  <div id="download-section-correlation" class="mt-3" style="display:none;">
+    <button id="download-plot-correlation-png" class="btn btn-primary" disabled>Download PNG</button>
+    <button id="download-plot-correlation-pdf" class="btn btn-outline-primary" style="display:none;">Download PDF</button>
+  </div>
+</div>

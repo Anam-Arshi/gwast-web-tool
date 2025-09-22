@@ -1,0 +1,107 @@
+<!-- Per-SNP R2 and F Statistics -->
+<div class="tab-pane fade" id="r2_f">
+  <h5><i class="fas fa-chart-bar me-2"></i>Per-SNP R² and F Statistics</h5>
+  <p class="text-muted">
+    Calculate variance explained (R²) and F-statistics per SNP for quantitative or binary traits.<br>
+    Provide effect size, allele frequency, sample sizes, and prevalence if applicable.
+  </p>
+
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="r2_f">
+    <input type="hidden" name="task" value="r2_f">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Calculation Options</strong></div>
+      <div class="card-body">
+
+        <div class="mb-3">
+          <label for="mode" class="form-label"><strong>Trait Mode</strong></label>
+          <select class="form-select" id="mode" name="mode" required>
+            <option value="q" selected>Quantitative Trait</option>
+            <option value="b">Binary Trait</option>
+          </select>
+          <small class="text-muted">Select whether the trait is quantitative or binary (case-control).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="vary" class="form-label"><strong>Variance (Var(Y)) or Use SE</strong></label>
+          <select class="form-select" id="vary" name="vary" required>
+            <option value="1" selected>1 (default)</option>
+            <option value="se">Estimate from SE</option>
+          </select>
+          <small class="text-muted">For quantitative traits, use 1 or estimate variance from SE.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="k" class="form-label"><strong>k Parameter for F-statistics</strong></label>
+          <input type="number" class="form-control" id="k" name="k" value="1" min="1" step="1" required>
+          <small class="text-muted">k is usually 1 for standard calculation.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="ncase" class="form-label"><strong>Number of Cases (binary traits only)</strong></label>
+          <input type="number" class="form-control" id="ncase" name="ncase" min="0" step="1" disabled>
+          <small class="text-muted">Number of cases in the dataset. Required for binary traits.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="ncontrol" class="form-label"><strong>Number of Controls (binary traits only)</strong></label>
+          <input type="number" class="form-control" id="ncontrol" name="ncontrol" min="0" step="1" disabled>
+          <small class="text-muted">Number of controls in the dataset. Required for binary traits.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="prevalence" class="form-label"><strong>Population Prevalence (binary traits only)</strong></label>
+          <input type="number" class="form-control" id="prevalence" name="prevalence" min="0" max="1" step="any" disabled>
+          <small class="text-muted">Prevalence of the trait in the general population (0 to 1).</small>
+        </div>
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-calculator me-2"></i>Calculate R² and F
+    </button>
+  </form>
+
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-r2_f" class="mt-3" style="display:none;"></div>
+  <!-- Results for this tab -->
+  <div id="result-info-r2_f" class="mt-3" style="display:none;"></div>
+
+  <!-- Logs -->
+  <div id="log-section-r2_f" class="mt-3" style="display:none;">
+    <button class="btn btn-sm btn-outline-secondary mb-2" type="button"
+            onclick="toggleLogs('r2_f')">
+      <i class="fas fa-terminal me-2"></i>View Logs
+    </button>
+    <pre id="log-content-r2_f" class="bg-dark text-light p-3 rounded"
+        style="max-height:300px; overflow-y:auto; font-size:0.9em; display:none;"></pre>
+  </div>
+  <!-- Download section for this tab -->
+  <div id="download-section-r2_f" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+        <button id="download-zip-r2_f"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+        <small id="zip-size-r2_f" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Enable/disable inputs based on trait mode
+document.getElementById('mode').addEventListener('change', function() {
+  const isBinary = this.value === 'b';
+  document.getElementById('ncase').disabled = !isBinary;
+  document.getElementById('ncontrol').disabled = !isBinary;
+  document.getElementById('prevalence').disabled = !isBinary;
+});
+</script>

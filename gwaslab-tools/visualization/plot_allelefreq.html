@@ -1,0 +1,88 @@
+<!-- plot_allelefreq.html -->
+<div class="tab-pane fade" id="allelefreq">
+  <h5><i class="fas fa-chart-scatter me-2"></i>Allele Frequency Comparison</h5>
+  <p class="text-muted mb-3">
+    Compare the reported Effect Allele Frequency (EAF) in your summary statistics with allele frequency from a reference VCF panel.
+  </p>
+  <div class="alert alert-info">
+    <strong>Note:</strong> Frequency harmonization with reference panel is performed automatically.
+  </div>
+
+  <form method="post" action="run_gwaslab_plots.php" class="viz-form" data-task="allelefreq">
+    <input type="hidden" name="task" value="allelefreq">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Reference Panel Population</strong></div>
+      <div class="card-body">
+        <label for="ref_population" class="form-label"><strong>Select Population</strong></label>
+        <select class="form-select" id="ref_population" name="ref_population" required>
+          <option value="">-- Select Population --</option>
+          <option value="eas">EAS</option>
+          <option value="eur">EUR</option>
+          <option value="sas">SAS</option>
+          <option value="amr">AMR</option>
+          <option value="afr">AFR</option>
+          <option value="pan">PAN</option>
+        </select>
+        <small class="text-muted">Choose the population reference panel to use for frequency comparison.</small>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Reference Genome Build</strong></div>
+      <div class="card-body">
+        <label for="ref_build" class="form-label"><strong>Build</strong></label>
+        <select class="form-select" id="ref_build" name="ref_build" required>
+          <option value="19" selected>GRCh37/hg19</option>
+          <option value="38">GRCh38/hg38</option>
+        </select>
+        <small class="text-muted">Reference genome build for coordinates and annotation.</small>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Plot Options</strong></div>
+      <div class="card-body">
+        <label for="threshold" class="form-label"><strong>Outlier Threshold</strong></label>
+        <input type="number" step="any" min="0" class="form-control" id="threshold" name="threshold" value="0.12" required>
+        <small class="text-muted">Threshold difference in allele frequencies to flag outliers (e.g., 0.12).</small>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Figure Settings</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="dpi" class="form-label"><strong>Resolution (DPI)</strong></label>
+            <input type="number" min="150" max="600" step="50" value="300" class="form-control" id="dpi" name="dpi">
+            <small class="text-muted">Recommended ≥300 for publication-quality figures.</small>
+          </div>
+          <div class="col-md-8">
+            <label for="save" class="form-label"><strong>Save Plot As</strong></label>
+            <input type="text" class="form-control" id="save" name="save" placeholder="e.g. af_correlation.png">
+            <small class="text-muted">File name for saving the plot (leave blank to skip saving).</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-start">
+      <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+        <i class="fas fa-chart-scatter me-2"></i>Generate Allele Frequency Comparison Plot
+      </button>
+    </div>
+  </form>
+
+  <!-- Processing status -->
+  <div id="processing-status-allelefreq" class="mt-3" style="display:none;"></div>
+
+  <!-- Plot display -->
+  <div id="plot-display-allelefreq" class="mt-4"></div>
+
+  <!-- Download section -->
+  <div id="download-section-allelefreq" class="mt-3" style="display:none;">
+    <button id="download-plot-allelefreq-png" class="btn btn-primary" disabled>Download PNG</button>
+    <button id="download-plot-allelefreq-pdf" class="btn btn-outline-primary" style="display:none;">Download PDF</button>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<!-- Liftover -->
+<div class="tab-pane fade" id="liftover">
+  <h5><i class="fas fa-exchange-alt me-2"></i>Liftover Genome Build</h5>
+  <p class="text-muted">Convert summary statistics between genome builds (e.g., hg19 ↔ hg38).</p>
+
+<form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="liftover">
+  <input type="hidden" name="task" value="liftover">
+
+  <div class="card mb-3">
+    <div class="card-header"><strong>Liftover Options</strong></div>
+    <div class="card-body">
+
+      <!-- Current Build -->
+      <div class="mb-3">
+        <label for="current_build" class="form-label"><strong>Current Build</strong></label>
+        <select class="form-select" name="build" id="current_build" required>
+          <option value="19">hg19 (GRCh37)</option>
+          <option value="38">hg38 (GRCh38)</option>
+        </select>
+        <small class="text-muted">Select the build your current summary stats are in</small>
+      </div>
+
+      <!-- Target Build -->
+      <div class="mb-3">
+        <label for="target_build" class="form-label"><strong>Target Build</strong></label>
+        <select class="form-select" name="target_build" id="target_build" required>
+          <option value="19">hg19 (GRCh37)</option>
+          <option value="38">hg38 (GRCh38)</option>
+        </select>
+        <small class="text-muted">Choose the genome build to convert to</small>
+      </div>
+
+      <!-- Remove unmapped variants -->
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="remove_unmapped" name="remove" value="true" checked>
+        <label class="form-check-label" for="remove_unmapped">
+          Remove unmapped variants
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+    <i class="fas fa-play me-2"></i>Run Liftover
+  </button>
+</form>
+
+  <!-- Processing Status -->
+  <div id="processing-status-liftover" class="mt-3" style="display:none;"></div>
+
+  <!-- Results -->
+  <div id="result-info-liftover" class="mt-3" style="display:none;"></div>
+
+  <!-- Logs -->
+  <div id="log-section-liftover" class="mt-3" style="display:none;">
+    <button class="btn btn-sm btn-outline-secondary mb-2" type="button" 
+            onclick="toggleLogs('liftover')">
+      <i class="fas fa-terminal me-2"></i>View Logs
+    </button>
+    <pre id="log-content-liftover" class="bg-dark text-light p-3 rounded" 
+        style="max-height:300px; overflow-y:auto; font-size:0.9em; display:none;"></pre>
+  </div>
+
+  <!-- Download section -->
+  <div id="download-section-liftover" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+
+        <button id="download-zip-liftover"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+
+        <small id="zip-size-liftover" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Auto-disable target build = current build
+  document.getElementById('current_build').addEventListener('change', function () {
+    let current = this.value;
+    let targetSelect = document.getElementById('target_build');
+
+    for (let option of targetSelect.options) {
+      option.disabled = (option.value === current);
+    }
+
+    // If current target == current build, reset to the other build
+    if (targetSelect.value === current) {
+      targetSelect.value = (current === "19" ? "38" : "19");
+    }
+  });
+
+  // Trigger once on load to initialize
+  document.getElementById('current_build').dispatchEvent(new Event('change'));
+</script>

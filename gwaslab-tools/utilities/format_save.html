@@ -1,0 +1,141 @@
+<!-- Format and Save -->
+<div class="tab-pane fade" id="format_save">
+  <h5><i class="fas fa-save me-2"></i>Format and Save Summary Statistics</h5>
+  <p class="text-muted">
+    Reformat and save your summary statistics in a variety of popular formats.<br>
+    Select a format and configure additional export options below.
+     <!-- <br>
+    <a href="https://github.com/Cloufield/formatbook" target="_blank" rel="noopener" style="font-size:0.9em;">
+      <i class="fas fa-book"></i> View supported formats (formatbook)
+    </a> -->
+  </p>
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="format_save">
+    <input type="hidden" name="task" value="format_save">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Format and Export Options</strong></div>
+      <div class="card-body">
+
+        <div class="mb-3">
+          <label for="export_format" class="form-label"><strong>Output Format</strong></label>
+          <select class="form-select" id="export_format" name="export_format" required>
+            <option value="gwaslab">GWASLab (default)</option>
+            <option value="ldsc">LDSC</option>
+            <option value="plink">PLINK</option>
+            <option value="plink2">PLINK2</option>
+            <option value="saige">SAIGE</option>
+            <option value="fastgwa">FastGWA</option>
+            <option value="regenie">REGENIE</option>
+            <option value="bolt_lmm">BOLT-LMM</option>
+            <option value="ssf">GWAS-SSF</option>
+            <option value="vcf">GWAS-VCF</option>
+            <option value="metal">METAL</option>
+            <option value="mrmega">MRMEGA</option>
+            <option value="fuma">FUMA</option>
+            <option value="locuszoom">LocusZoom</option>
+            <option value="popcorn">Popcorn</option>
+            <option value="cojo">COJO</option>
+          </select>
+          <small class="text-muted">Choose your desired output format. For details and format specifications, see <a href="https://github.com/Cloufield/formatbook" target="_blank">formatbook</a>.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="export_cols" class="form-label"><strong>Additional Columns to Include (optional)</strong></label>
+          <input type="text" class="form-control" id="export_cols" name="export_cols" placeholder="e.g. INFO,Z,EAF">
+          <small class="text-muted">Comma-separated column names to include in output (case-sensitive).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="extract_snps" class="form-label"><strong>Extract SNPs (optional)</strong></label>
+          <input type="text" class="form-control" id="extract_snps" name="extract_snps" placeholder="e.g. rs123,rs456">
+          <small class="text-muted">Only output these SNPs (comma-separated rsIDs or SNPIDs).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="exclude_snps" class="form-label"><strong>Exclude SNPs (optional)</strong></label>
+          <input type="text" class="form-control" id="exclude_snps" name="exclude_snps" placeholder="e.g. rs789,rs999">
+          <small class="text-muted">Exclude these SNPs (comma-separated rsIDs or SNPIDs).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="id_use" class="form-label"><strong>ID Type for Extract/Exclude</strong></label>
+          <select class="form-select" id="id_use" name="id_use">
+            <option value="rsID" selected>rsID</option>
+            <option value="SNPID">SNPID</option>
+          </select>
+          <small class="text-muted">Specify which variant ID to use for Extract or Exclude lists.</small>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="hapmap3" id="hapmap3">
+          <label class="form-check-label" for="hapmap3">
+            <strong>Only Output HapMap3 SNPs</strong>
+          </label>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="exclude_hla" id="exclude_hla">
+          <label class="form-check-label" for="exclude_hla">
+            <strong>Exclude HLA Region</strong>
+            <small class="text-muted d-block">(chr6: 25Mb-34Mb by default)</small>
+          </label>
+        </div>
+
+        <div class="mb-3">
+          <label for="build" class="form-label"><strong>Genome Build</strong></label>
+          <select class="form-select" id="build" name="build">
+            <option value="19">GRCh37 (19)</option>
+            <option value="38">GRCh38 (38)</option>
+          </select>
+          <small class="text-muted">Specify genome build for output coordinates if reformatting.</small>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="bgzip" id="bgzip">
+          <label class="form-check-label" for="bgzip">
+            <strong>BGZIP Output (bed/vcf only)</strong>
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="tabix" id="tabix">
+          <label class="form-check-label" for="tabix">
+            <strong>Tabix Index (bed/vcf only)</strong>
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="md5sum" id="md5sum">
+          <label class="form-check-label" for="md5sum">
+            <strong>Output MD5 Checksums</strong>
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-save me-2"></i>Format &amp; Save
+    </button>
+  </form>
+
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-format_save" class="mt-3" style="display:none;"></div>
+  <!-- Results for this tab -->
+  <div id="result-info-format_save" class="mt-3" style="display:none;"></div>
+  <!-- Download section for this tab -->
+  <div id="download-section-format_save" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+        <button id="download-zip-format_save"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+        <small id="zip-size-format_save" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>

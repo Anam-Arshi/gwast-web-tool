@@ -1,0 +1,192 @@
+<!-- plot_mqq.html -->
+<div class="tab-pane fade show active" id="mqqplot">
+  <h5><i class="fas fa-chart-bar me-2"></i>Manhattan & QQ Plot</h5>
+  <p class="text-muted mb-3">
+    Generate <strong>customizable Manhattan and Q-Q plots</strong> from GWAS summary statistics.<br>
+    <span class="text-danger">*</span> <strong>Plot Layout</strong> is required. All other options are optional for custom publication-ready figures.
+  </p>
+  <div class="alert alert-warning">
+    <strong>Tip:</strong> Choose both plots or just Manhattan/Q-Q. Annotating highlights key loci and helps publication clarity.
+  </div>
+
+  <form method="post" action="run_gwaslab_plots.php" class="viz-form" data-task="mqqplot">
+    <input type="hidden" name="task" value="mqqplot">
+
+    <!-- Plot Layout (required) -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Plot Layout <span class="text-danger">*</span></strong></div>
+      <div class="card-body">
+        <label for="mode" class="form-label"><strong>Type</strong></label>
+        <select class="form-select" name="mode" id="mode" required>
+          <option value="mqq" selected>Manhattan + QQ (side by side)</option>
+          <option value="qqm">QQ + Manhattan</option>
+          <option value="m">Manhattan only</option>
+          <option value="qq">QQ only</option>
+        </select>
+        <small class="text-muted">Combined layout preferred for publication (required).</small>
+      </div>
+    </div>
+
+    <!-- Annotation -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Annotation & Highlighting</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="anno" class="form-label"><strong>Annotation Mode</strong></label>
+            <select class="form-select" name="anno" id="anno">
+              <option value="None" selected>None</option>
+              <option value="True">Chromosome & Position</option>
+              <option value="GENENAME">Nearest gene name</option>
+              <option value="SNPID">SNPID</option>
+            </select>
+            <small class="text-muted">Mode to annotate genome-wide or selected loci.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="anno_set" class="form-label"><strong>Annotate Set</strong></label>
+            <input type="text" class="form-control" name="anno_set" id="anno_set" placeholder="e.g. rs12345,rs23456">
+            <small class="text-muted">Comma-separated SNPIDs/rsIDs to always annotate.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="anno_style" class="form-label"><strong>Annotation Style</strong></label>
+            <select class="form-select" name="anno_style" id="anno_style">
+              <option value="">Default</option>
+              <option value="tight">tight</option>
+              <option value="right">right</option>
+              <option value="expand">expand</option>
+            </select>
+            <small class="text-muted">How annotation labels are positioned.</small>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <label for="highlight" class="form-label"><strong>Highlight Loci</strong></label>
+            <input type="text" class="form-control" name="highlight" id="highlight" placeholder="rs23456,17:12345:A:T">
+            <small class="text-muted">Highlights loci regions for visibility.</small>
+          </div>
+          <div class="col-md-6">
+            <label for="pinpoint" class="form-label"><strong>Pinpoint Variants</strong></label>
+            <input type="text" class="form-control" name="pinpoint" id="pinpoint" placeholder="rs777,1:54321:G:C">
+            <small class="text-muted">Flags variants with strong coloring.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main plot options -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Plot Axes & Display</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label"><strong>Skip Low -log10(P)</strong></label>
+            <input type="number" class="form-control" name="skip" min="0" step="0.1" placeholder="e.g. 3">
+            <small class="text-muted">Skips SNPs below -log10(P) for clarity.</small>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label"><strong>Cut High -log10(P)</strong></label>
+            <input type="number" class="form-control" name="cut" min="0" step="0.1" placeholder="e.g. 20">
+            <small class="text-muted">Compresses y-axis for extreme outliers.</small>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label"><strong>Use Rank for X-axis</strong></label>
+            <select class="form-select" name="use_rank">
+              <option value="">Genomic Position</option>
+              <option value="True">Plot by Rank</option>
+            </select>
+            <small class="text-muted">No gaps in rank mode; default is genomic.</small>
+          </div>
+          <div class="col-md-3">
+            <div class="form-check mt-4">
+              <input class="form-check-input" type="checkbox" name="stratified" id="stratified" value="True">
+              <label class="form-check-label" for="stratified"><strong>Show MAF-Stratified QQ</strong></label>
+            </div>
+            <small class="text-muted d-block">Multiple QQ lines by allele frequency bin.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colors, thresholds, titles -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Significance, Coloring & Output</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label"><strong>Genome-wide Threshold</strong></label>
+            <input type="number" class="form-control" name="sig_level" placeholder="5e-8" step="any" value="5e-8">
+            <small class="text-muted">Significance line (5e-8 default).</small>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label"><strong>Suggestive Line</strong></label>
+            <input type="number" class="form-control" name="suggestive_sig_level" placeholder="1e-6" step="any">
+            <small class="text-muted">Suggestive threshold (1e-6 default).</small>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label"><strong>Manhattan Colors</strong></label>
+            <input type="text" class="form-control" name="colors" placeholder="#597FBD,#74BAD3">
+            <small class="text-muted">Chromosome color pattern (comma separated).</small>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label"><strong>Highlight / Pinpoint Color</strong></label>
+            <input type="text" class="form-control" name="highlight_color" placeholder="#CB132D">
+            <small class="text-muted">Color for highlighted or pinpointed loci.</small>
+          </div>
+        </div>
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <label class="form-label"><strong>Genome Build</strong></label>
+            <select class="form-select" name="build">
+              <option value="19">GRCh37/hg19</option>
+              <option value="38">GRCh38/hg38</option>
+            </select>
+            <small class="text-muted">Select for annotation plotting.</small>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label"><strong>Figure Title</strong></label>
+            <input type="text" class="form-control" name="title" placeholder="e.g. GWAS of Trait...">
+            <small class="text-muted">Optional main figure title.</small>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label"><strong>Font Size</strong></label>
+            <input type="number" class="form-control" name="fontsize" value="10" min="6" max="30">
+            <small class="text-muted">Label, axis, annotation size.</small>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label"><strong>Resolution (DPI)</strong></label>
+            <input type="number" class="form-control" name="dpi" value="300" min="150" max="600" step="50">
+            <small class="text-muted">Minimum 300 for publication.</small>
+          </div>
+        </div>
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <label class="form-label"><strong>Save as PDF?</strong></label>
+            <select class="form-select" name="save_pdf">
+              <option value="">No</option>
+              <option value="True">Yes</option>
+            </select>
+            <small class="text-muted">Also save as vector PDF format.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+         <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+            <i class="fas fa-chart-bar me-2"></i>Generate Plot
+            </button>
+  </form>
+
+
+
+  <!-- Status area -->
+  <div id="processing-status-mqqplot" class="mt-3" style="display:none;"></div>
+
+  <!-- Plot display area -->
+  <div id="plot-display-mqqplot" class="mt-4"></div>
+
+  <!-- Download buttons -->
+  <div id="download-section-mqqplot" class="mt-3" style="display:none;">
+    <button id="download-plot-mqqplot-png" class="btn btn-primary me-2" disabled>Download PNG</button>
+    <button id="download-plot-mqqplot-pdf" class="btn btn-outline-primary" style="display:none;">Download PDF</button>
+  </div>
+</div>

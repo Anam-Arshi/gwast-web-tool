@@ -1,0 +1,148 @@
+<div class="tab-pane fade" id="harmonize">
+  <h5><i class="fas fa-balance-scale me-2"></i>Harmonize Summary Stats</h5>
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="harmonize">
+    <input type="hidden" name="task" value="harmonize">
+    
+    <div class="card mb-3">
+      <div class="card-header"><strong>Basic Settings</strong></div>
+      <div class="card-body">
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="basic_check" id="basic_check" checked>
+          <label class="form-check-label" for="basic_check">
+            Perform basic quality checks
+            <small class="text-muted d-block">Includes sanity checks, standardization, and normalization</small>
+          </label>
+        </div>
+
+         <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="remove_dup" id="remove_dup" checked>
+          <label class="form-check-label" for="remove_dup">
+            Remove duplicate variants
+            <small class="text-muted d-block">Remove variants with duplicate CHR:POS</small>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Reference Selection</strong></div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Genome Build</label>
+              <select name="genome_build" class="form-control">
+                <option value="hg19" selected>GRCh37/hg19</option>
+                <option value="hg38">GRCh38/hg38</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Population Reference</label>
+              <select name="population" class="form-control">
+                <option value="EUR" selected>EUR (European)</option>
+                <option value="EAS">EAS (East Asian)</option>
+                <option value="AFR">AFR (African)</option>
+                <option value="AMR">AMR (American)</option>
+                <option value="SAS">SAS (South Asian)</option>
+              </select>
+              <small class="text-muted">Used for strand inference of palindromic SNPs</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Threshold Parameters</strong></div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">MAF Threshold</label>
+              <select name="maf_threshold" class="form-control">
+                <option value="0.30">0.30</option>
+                <option value="0.35" selected>0.35</option>
+                <option value="0.40">0.40</option>
+                <option value="0.45">0.45</option>
+                <option value="0.50">0.50</option>
+              </select>
+              <small class="text-muted">Only palindromic SNPs with MAF &lt; threshold will be inferred</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">DAF Tolerance</label>
+              <select name="daf_tolerance" class="form-control">
+                <option value="0.10">0.10</option>
+                <option value="0.15" selected>0.15</option>
+                <option value="0.20">0.20</option>
+                <option value="0.25">0.25</option>
+                <option value="0.30">0.30</option>
+              </select>
+              <small class="text-muted">Maximum allowed difference between sumstats EAF and reference frequency</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Additional Options</strong></div>
+      <div class="card-body">
+     
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" name="remove_problematic" id="remove_problematic">
+          <label class="form-check-label" for="remove_problematic">
+            Remove problematic variants
+            <small class="text-muted d-block">Remove variants that cannot be harmonized (default: keep for review)</small>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-balance-scale me-2"></i>Start Harmonization
+    </button>
+  </form>
+  
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-harmonize" class="mt-3" style="display:none;"></div>
+  
+  <!-- Results for this tab -->
+  <div id="result-info-harmonize" class="mt-3" style="display:none;"></div>
+  
+  <!-- Download section for this tab -->
+  <div id="download-section-harmonize" class="card mt-3 border-success" style="display: none;">
+    <div class="card-header bg-light">
+      <h6 class="mb-0"><i class="fas fa-download me-2"></i>Download Results</h6>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-outline-primary mb-2" onclick="downloadFile('harmonized_result', 'tsv')" disabled>
+            <i class="fas fa-file-csv"></i> Download Harmonized Data (TSV)
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-outline-info mb-2" onclick="downloadFile('harmonization_log', 'txt')" disabled>
+            <i class="fas fa-file-alt"></i> Download Harmonization Log
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <button class="btn btn-outline-success mb-2" onclick="downloadFile('status_summary', 'tsv')" disabled>
+            <i class="fas fa-chart-bar"></i> Download Status Summary
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-outline-warning mb-2" onclick="viewHarmonizationReport()" disabled>
+            <i class="fas fa-eye"></i> View Harmonization Report
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

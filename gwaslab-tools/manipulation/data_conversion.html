@@ -1,0 +1,99 @@
+<!-- Data Conversion -->
+<div class="tab-pane fade" id="data_conversion">
+  <h5><i class="fas fa-exchange-alt me-2"></i>Data Conversion</h5>
+  <p class="text-muted">Convert statistics (e.g., P ↔ MLOG10P, BETA/SE ↔ OR, Z ↔ CHISQ) using GWASLab's fill_data() utility.</p>
+
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="data_conversion">
+    <input type="hidden" name="task" value="data_conversion">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Conversion Options</strong></div>
+      <div class="card-body">
+
+        <!-- Columns to Fill -->
+        <div class="mb-3">
+          <label for="to_fill" class="form-label"><strong>Statistics to Convert</strong></label>
+          <select class="form-select" name="to_fill[]" id="to_fill" multiple required>
+            <option value="MLOG10P">P → MLOG10P</option>
+            <option value="P">MLOG10P → P</option>
+            <option value="Z">P → Z</option>
+            <option value="CHISQ">P → CHISQ</option>
+            <option value="OR">BETA & SE → OR</option>
+            <option value="BETA">OR → BETA & SE</option>
+            <!-- <option value="CHISQ">Z ↔ CHISQ</option> -->
+            <option value="MAF">EAF → MAF</option>
+          </select>
+          <small class="text-muted">Select one or more conversions to perform.</small>
+        </div>
+
+        <!-- Extreme P -->
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="extreme" id="extreme">
+          <label class="form-check-label" for="extreme">
+            <strong>Use <code>extreme=True</code> for very small P-values</strong><br>
+            <small class="text-muted">Enable enhanced handling for P &lt; 1e-308.</small>
+          </label>
+        </div>
+
+        <!-- Overwrite Existing -->
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="overwrite" id="overwrite">
+          <label class="form-check-label" for="overwrite">
+            <strong>Overwrite existing columns</strong><br>
+            <small class="text-muted">Replace columns if they already exist in the file.</small>
+          </label>
+        </div>
+
+        <!-- Only Significant -->
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="only_sig" id="only_sig">
+          <label class="form-check-label" for="only_sig">
+            <strong>Only fill for significant variants</strong><br>
+            <small class="text-muted">Limit conversions to variants below genome-wide significance.</small>
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-play me-2"></i>Apply Conversion
+    </button>
+  </form>
+
+  <!-- Processing Status -->
+  <div id="processing-status-data_conversion" class="mt-3" style="display:none;"></div>
+
+  <!-- Results Info -->
+  <div id="result-info-data_conversion" class="mt-3" style="display:none;"></div>
+
+  <!-- Logs -->
+  <div id="log-section-data_conversion" class="mt-3" style="display:none;">
+    <button class="btn btn-sm btn-outline-secondary mb-2" type="button"
+            onclick="toggleLogs('data_conversion')">
+      <i class="fas fa-terminal me-2"></i>View Logs
+    </button>
+    <pre id="log-content-data_conversion" class="bg-dark text-light p-3 rounded"
+         style="max-height:300px; overflow-y:auto; font-size:0.9em; display:none;"></pre>
+  </div>
+
+  <!-- Download Section -->
+  <div id="download-section-data_conversion" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+
+        <button id="download-zip-data_conversion"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+
+        <small id="zip-size-data_conversion" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>

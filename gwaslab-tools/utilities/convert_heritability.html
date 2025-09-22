@@ -1,0 +1,70 @@
+<!-- Convert Heritability -->
+<div class="tab-pane fade" id="convert_heritability">
+  <h5><i class="fas fa-random me-2"></i>Convert Observed-scale Heritability to Liability-scale</h5>
+  <p class="text-muted">
+    Convert observed-scale SNP heritability (<var>h²<sub>obs</sub></var>) to liability-scale heritability for a disease trait.<br>
+    Formula: <code>h²_liability = h²_obs × [K(1-K)/Z²] × [K(1-K)/P(1-P)]</code>
+    (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3059431/" target="_blank">Reference</a>)
+  </p>
+
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="convert_heritability">
+    <input type="hidden" name="task" value="convert_heritability">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Heritability Conversion Inputs</strong></div>
+      <div class="card-body">
+
+        <div class="mb-3">
+          <label for="h2_obs" class="form-label"><strong>Observed-scale Heritability (<var>h²<sub>obs</sub></var>)</strong></label>
+          <input type="number" step="any" min="0" max="1" class="form-control" id="h2_obs" name="h2_obs" required placeholder="e.g. 0.15">
+          <small class="text-muted">Estimated SNP-heritability on the observed scale, between 0 and 1.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="sample_prev" class="form-label"><strong>Sample Prevalence (<var>P</var>)</strong></label>
+          <input type="number" step="any" min="0" max="1" class="form-control" id="sample_prev" name="P" required placeholder="e.g. 0.12">
+          <small class="text-muted">Ratio of cases in your study sample (e.g., cases/(cases+controls)). Value between 0 and 1.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="pop_prev" class="form-label"><strong>Population Prevalence (<var>K</var>)</strong></label>
+          <input type="number" step="any" min="0" max="1" class="form-control" id="pop_prev" name="K" required placeholder="e.g. 0.06">
+          <small class="text-muted">Estimated trait prevalence in the general population. Value between 0 and 1.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="se_obs" class="form-label"><strong>Standard Error of <var>h²<sub>obs</sub></var> (optional)</strong></label>
+          <input type="number" step="any" min="0" class="form-control" id="se_obs" name="se_obs" placeholder="e.g. 0.02">
+          <small class="text-muted">Standard error for observed-scale heritability (optional).</small>
+        </div>
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-exchange-alt me-2"></i>Convert Heritability
+    </button>
+  </form>
+
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-convert_heritability" class="mt-3" style="display:none;"></div>
+  <!-- Results for this tab -->
+  <div id="result-info-convert_heritability" class="mt-3" style="display:none;"></div>
+  <!-- Download section for this tab -->
+  <div id="download-section-convert_heritability" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+        <button id="download-zip-convert_heritability"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+        <small id="zip-size-convert_heritability" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>

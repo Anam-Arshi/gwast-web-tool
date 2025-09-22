@@ -1,0 +1,197 @@
+<!-- plot_region.html -->
+<div class="tab-pane fade" id="region">
+  <h5><i class="fas fa-map-marker-alt me-2"></i>Regional Plot</h5>
+  <p class="text-muted mb-3">
+    Create a regional association plot with LD coloring and gene track around a locus or specified genomic interval.
+  </p>
+  <div class="alert alert-info">
+    <strong>Tip:</strong> Provide either a center locus and window (rsID or chr:pos) or an explicit region (chr:start-end). LD coloring requires a reference VCF.
+  </div>
+
+  <form method="post" action="run_gwaslab_plots.php" class="viz-form" data-task="region">
+    <input type="hidden" name="task" value="region">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Region <span class="text-danger">*</span></strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <label for="locus_center" class="form-label"><strong>Center Locus</strong></label>
+            <input type="text" class="form-control" id="locus_center" name="locus_center" placeholder="e.g. rs12345 or 7:156738803">
+            <small class="text-muted">Used with window size to derive region, otherwise leave blank and fill explicit range.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="window_kb" class="form-label"><strong>Window Size (kb)</strong></label>
+            <input type="number" class="form-control" id="window_kb" name="window_kb" value="100" min="10" max="2000" step="10">
+            <small class="text-muted">Defines ±kb around the center locus to plot.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="region_text" class="form-label"><strong>Explicit Region (chr:start-end)</strong></label>
+            <input type="text" class="form-control" id="region_text" name="region_text" placeholder="e.g. 7:156538803-157538803">
+            <small class="text-muted">Overrides center/window if provided. (Required; either this or center locus + window)</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LD and References card -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>LD and References</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="vcf_panel" class="form-label"><strong>Reference Panel (VCF)</strong></label>
+            <select class="form-select" id="vcf_panel" name="vcf_panel">
+              <option value="">None (no LD coloring)</option>
+              <option value="1kg_eas_hg19">1KG EAS (hg19)</option>
+              <option value="1kg_eur_hg19">1KG EUR (hg19)</option>
+              <option value="1kg_eas_hg38">1KG EAS (hg38)</option>
+              <option value="1kg_eur_hg38">1KG EUR (hg38)</option>
+            </select>
+            <small class="text-muted">Backend maps panel to vcf_path for LD-based r2 coloring.</small>
+          </div>
+          <div class="col-md-8">
+            <label for="region_ref" class="form-label"><strong>Reference Variant(s)</strong></label>
+            <input type="text" class="form-control" id="region_ref" name="region_ref" placeholder="rsIDs or SNPIDs, comma separated (max ~7)">
+            <small class="text-muted">Multiple references supported; LD colors/shapes differentiate them.</small>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <label for="region_ld_threshold" class="form-label"><strong>LD r2 Thresholds</strong></label>
+            <input type="text" class="form-control" id="region_ld_threshold" name="region_ld_threshold" value="0.2,0.4,0.6,0.8">
+            <small class="text-muted">Comma-separated thresholds for LD categories.</small>
+          </div>
+          <div class="col-md-8">
+            <label for="region_ld_colors" class="form-label"><strong>LD Colors (single ref)</strong></label>
+            <input type="text" class="form-control" id="region_ld_colors" name="region_ld_colors" placeholder="#E4E4E4,#020080,#86CEF9,#24FF02,#FDA400,#FF0000,#FF0000">
+            <small class="text-muted">Optional custom colors for LD categories; leave blank for defaults.</small>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <label for="region_grid" class="form-label"><strong>Show Grid Lines</strong></label>
+            <select class="form-select" id="region_grid" name="region_grid">
+              <option value="">No</option>
+              <option value="True">Yes</option>
+            </select>
+            <small class="text-muted">Add background grid for readability.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="region_recombination" class="form-label"><strong>Show Recombination</strong></label>
+            <select class="form-select" id="region_recombination" name="region_recombination">
+              <option value="">Default</option>
+              <option value="True">Yes</option>
+              <option value="False">No</option>
+            </select>
+            <small class="text-muted">Toggle recombination rate curve.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="region_step" class="form-label"><strong>X‑axis Steps</strong></label>
+            <input type="number" class="form-control" id="region_step" name="region_step" value="21" min="5" max="101" step="2">
+            <small class="text-muted">Number of ticks across the region.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Annotation & Gene Track card -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Annotation & Gene Track</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="anno" class="form-label"><strong>Annotate</strong></label>
+            <select class="form-select" id="anno" name="anno">
+              <option value="None">None</option>
+              <option value="True">Chromosome and Position (chr:pos)</option>
+              <option value="GENENAME">Nearest Gene Names</option>
+              <option value="SNPID">SNPID</option>
+            </select>
+            <small class="text-muted">Automatic, gene‑based, or SNPID annotation modes.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="anno_set" class="form-label"><strong>Annotate Set</strong></label>
+            <input type="text" class="form-control" id="anno_set" name="anno_set" placeholder="rsIDs/SNPIDs comma separated">
+            <small class="text-muted">Force annotation for specific variants.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="anno_style" class="form-label"><strong>Annotation Style</strong></label>
+            <select class="form-select" id="anno_style" name="anno_style">
+              <option value="">Default</option>
+              <option value="tight">tight</option>
+              <option value="right">right</option>
+              <option value="expand">expand</option>
+            </select>
+            <small class="text-muted">Adjust label placement strategy.</small>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <label for="build" class="form-label"><strong>Build</strong></label>
+            <select class="form-select" id="build" name="build">
+              <option value="19" selected>GRCh37/hg19</option>
+              <option value="38">GRCh38/hg38</option>
+            </select>
+            <small class="text-muted">Reference build for coordinates/annotation.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Figure card -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Figure</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label for="title" class="form-label"><strong>Title</strong></label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Regional plot">
+            <small class="text-muted">Optional figure title.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="fontsize" class="form-label"><strong>Font Size</strong></label>
+            <input type="number" class="form-control" id="fontsize" name="fontsize" value="10" min="6" max="30">
+            <small class="text-muted">Axes/labels annotation size.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="dpi" class="form-label"><strong>Resolution (DPI)</strong></label>
+            <input type="number" class="form-control" id="dpi" name="dpi" value="300" min="150" max="600" step="50">
+            <small class="text-muted">Use ≥300 for publications.</small>
+          </div>
+          <div class="col-md-3">
+            <label for="save_pdf" class="form-label"><strong>Save as PDF?</strong></label>
+            <select class="form-select" id="save_pdf" name="save_pdf">
+              <option value="">No</option>
+              <option value="True">Yes</option>
+            </select>
+            <small class="text-muted">Save a vector PDF alongside PNG.</small>
+          </div>
+        </div>
+
+     
+      </div>
+    </div>
+       <div class="mt-4 text-start">
+          <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+            <i class="fas fa-map-marker-alt me-2"></i>Generate Regional Plot
+          </button>
+        </div>
+  </form>
+
+  <!-- Processing status -->
+  <div id="processing-status-region" class="mt-3" style="display:none;"></div>
+
+  <!-- Plot display -->
+  <div id="plot-display-region" class="mt-4"></div>
+
+  <!-- Download -->
+<div id="download-section-region" class="mt-3" style="display:none;">
+  <button id="download-plot-region-png" class="btn btn-primary me-2" disabled>Download PNG</button>
+  <button id="download-plot-region-pdf" class="btn btn-outline-primary" style="display:none;">Download PDF</button>
+</div>
+
+</div>

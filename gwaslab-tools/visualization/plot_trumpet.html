@@ -1,0 +1,188 @@
+<!-- plot_trumpet.html -->
+<div class="tab-pane fade" id="trumpet">
+  <h5><i class="fas fa-chart-line me-2"></i>Trumpet Plot</h5>
+  <p class="text-muted mb-3">
+    Visualize the relationship between Minor Allele Frequency (MAF) and Effect size (Beta or log(OR)) with power curves. Supports quantitative and binary trait modes.
+  </p>
+  <div class="alert alert-info">
+    <strong>Note:</strong> Specify sample sizes and significance levels carefully for power calculations. For binary traits, provide number of cases, controls, and prevalence.
+  </div>
+
+  <form method="post" action="run_gwaslab_plots.php" class="viz-form" data-task="trumpet">
+    <input type="hidden" name="task" value="trumpet">
+
+    <!-- Plot Mode -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Plot Mode</strong></div>
+      <div class="card-body">
+        <label for="trumpet-mode" class="form-label"><strong>Trait Type</strong></label>
+        <select class="form-select" id="trumpet-mode" name="mode" required>
+          <option value="q" selected>Quantitative Traits</option>
+          <option value="b">Binary Traits</option>
+        </select>
+        <small class="text-muted">Choose mode for sample size and power calculations.</small>
+      </div>
+    </div>
+
+    <!-- Quantitative trait parameters -->
+    <div class="card mb-3" id="trumpet-quant-params">
+      <div class="card-header"><strong>Quantitative Trait Parameters</strong></div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="trumpet-sig-level" class="form-label"><strong>Significance Level</strong></label>
+          <input type="number" step="any" class="form-control" id="trumpet-sig-level" name="sig_level" placeholder="e.g. 5e-8" value="5e-8">
+          <small class="text-muted">Upper limit for p-values (default 5e-8).</small>
+        </div>
+        <div class="mb-3">
+          <label for="trumpet-n" class="form-label"><strong>Sample Size (n)</strong></label>
+          <input type="number" class="form-control" id="trumpet-n" name="n" placeholder="Total sample size" required>
+          <small class="text-muted">Total sample size used.</small>
+        </div>
+        <div class="mb-3">
+          <label for="trumpet-ts" class="form-label"><strong>Power Curves (ts)</strong></label>
+          <input type="text" class="form-control" id="trumpet-ts" name="ts_q" value="0.2,0.4,0.6,0.8" placeholder="Comma-separated, e.g. 0.2,0.4,0.6,0.8">
+          <small class="text-muted">Power levels to plot.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Binary trait parameters -->
+    <div class="card mb-3" id="trumpet-binary-params" style="display:none;">
+      <div class="card-header"><strong>Binary Trait Parameters</strong></div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="trumpet-ncase" class="form-label"><strong>Number of Cases</strong></label>
+          <input type="number" class="form-control" id="trumpet-ncase" name="ncase" placeholder="Number of cases">
+          <small class="text-muted">Total cases in study (required for binary traits).</small>
+        </div>
+        <div class="mb-3">
+          <label for="trumpet-ncontrol" class="form-label"><strong>Number of Controls</strong></label>
+          <input type="number" class="form-control" id="trumpet-ncontrol" name="ncontrol" placeholder="Number of controls">
+          <small class="text-muted">Total controls in study (required for binary traits).</small>
+        </div>
+        <div class="mb-3">
+          <label for="trumpet-prevalence" class="form-label"><strong>Disease Prevalence</strong></label>
+          <input type="number" step="any" class="form-control" id="trumpet-prevalence" name="prevalence" placeholder="Disease prevalence">
+          <small class="text-muted">Population prevalence of the disease.</small>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="True" id="trumpet-or-to-rr" name="or_to_rr">
+          <label class="form-check-label" for="trumpet-or-to-rr">
+            Estimate Relative Risk (RR) using Odds Ratio (OR) and prevalence
+          </label>
+          <small class="text-muted d-block">Recommended for prevalence &lt;10%.</small>
+        </div>
+        <div class="mb-3 mt-3">
+          <label for="trumpet-ts-binary" class="form-label"><strong>Power Curves (ts)</strong></label>
+          <input type="text" class="form-control" id="trumpet-ts-binary" name="ts_b" value="0.2,0.4,0.6,0.8" placeholder="Comma-separated power levels">
+          <small class="text-muted">Power curves to plot for binary traits.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Common options -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Common Options</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="trumpet-anno-column" class="form-label"><strong>Annotation Column</strong></label>
+            <input type="text" class="form-control" id="trumpet-anno-column" name="anno" placeholder="Column name for annotation">
+            <small class="text-muted">Which column to use for annotating variants.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="trumpet-anno-style" class="form-label"><strong>Annotation Style</strong></label>
+            <select class="form-select" id="trumpet-anno-style" name="anno_style">
+              <option value="expand" selected>expand</option>
+              <option value="tight">tight</option>
+              <option value="right">right</option>
+            </select>
+            <small class="text-muted">Annotation label placement style.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="trumpet-build" class="form-label"><strong>Genome Build</strong></label>
+            <select class="form-select" name="build" id="trumpet-build">
+              <option value="19" selected>GRCh37/hg19</option>
+              <option value="38">GRCh38/hg38</option>
+            </select>
+            <small class="text-muted">Genome build for position mapping and annotations.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plot styling -->
+    <div class="card mb-3">
+      <div class="card-header"><strong>Plot Styling</strong></div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="trumpet-fontsize" class="form-label"><strong>Font Size</strong></label>
+            <input type="number" min="6" max="30" value="12" class="form-control" id="trumpet-fontsize" name="fontsize">
+            <small class="text-muted">Font size for plot labels and annotations.</small>
+          </div>
+          <div class="col-md-4">
+            <label for="trumpet-xscale" class="form-label"><strong>X-axis Scale</strong></label>
+            <select class="form-select" name="xscale" id="trumpet-xscale">
+              <option value="log" selected>Logarithmic</option>
+              <option value="nonlog">Linear</option>
+            </select>
+            <small class="text-muted">Scale of the x-axis (MAF)</small>
+          </div>
+          <div class="col-md-4">
+            <label for="trumpet-cmap" class="form-label"><strong>Color Map</strong></label>
+            <input type="text" class="form-control" name="cmap" id="trumpet-cmap" placeholder="e.g. cool" value="cool">
+            <small class="text-muted">Matplotlib colormap for power curves.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate button -->
+    <div class="mt-4 text-start">
+      <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+        <i class="fas fa-chart-line me-2"></i>Generate Trumpet Plot
+      </button>
+    </div>
+  </form>
+
+  <!-- Processing status -->
+  <div id="processing-status-trumpet" class="mt-3" style="display:none;"></div>
+
+  <!-- Plot display -->
+  <div id="plot-display-trumpet" class="mt-4"></div>
+
+  <!-- Download -->
+  <div id="download-section-trumpet" class="mt-3" style="display:none;">
+    <button id="download-plot-trumpet-png" class="btn btn-primary" disabled>Download PNG</button>
+    <button id="download-plot-trumpet-pdf" class="btn btn-outline-primary" style="display:none;">Download PDF</button>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const modeSelect = document.getElementById('trumpet-mode');
+  const quantParams = document.getElementById('trumpet-quant-params');
+  const binaryParams = document.getElementById('trumpet-binary-params');
+
+  function toggleTraitParams() {
+    if (modeSelect.value === 'q') {
+      quantParams.style.display = 'block';
+      binaryParams.style.display = 'none';
+      document.getElementById('trumpet-n').required = true;
+      document.getElementById('trumpet-ncase').required = false;
+      document.getElementById('trumpet-ncontrol').required = false;
+      document.getElementById('trumpet-prevalence').required = false;
+    } else if (modeSelect.value === 'b') {
+      quantParams.style.display = 'none';
+      binaryParams.style.display = 'block';
+      document.getElementById('trumpet-n').required = false;
+      document.getElementById('trumpet-ncase').required = true;
+      document.getElementById('trumpet-ncontrol').required = true;
+      document.getElementById('trumpet-prevalence').required = true;
+    }
+  }
+
+  modeSelect.addEventListener('change', toggleTraitParams);
+  toggleTraitParams(); // initialize on load
+});
+</script>

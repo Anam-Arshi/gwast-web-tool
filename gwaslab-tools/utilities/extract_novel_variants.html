@@ -1,0 +1,127 @@
+<!-- Extract Novel Variants -->
+<div class="tab-pane fade" id="extract_novel">
+  <h5><i class="fas fa-search-plus me-2"></i>Extract Novel Variants</h5>
+  <p class="text-muted">
+    Identify novel loci not previously reported in GWAS Catalog or user-provided known loci.<br>
+    You may provide an EFO trait ID (for automated GWAS Catalog query) or upload a known variants file.
+  </p>
+  <div class="alert alert-warning">
+  <strong>Note:</strong> This tool only works when your summary statistics are based on <code>GRCh38</code> genome build.
+  Please ensure the file is from GRCh38.
+</div>
+
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="extract_novel">
+    <input type="hidden" name="task" value="extract_novel">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Novel Variant Extraction Options</strong></div>
+      <div class="card-body">
+
+        <div class="mb-3">
+          <label for="novel_efo" class="form-label"><strong>EFO Trait ID (optional)</strong></label>
+          <input type="text" class="form-control" id="novel_efo" name="novel_efo" placeholder="e.g. EFO_0001360">
+          <small class="text-muted">Enter EFO ID for trait if you want to match against GWAS Catalog loci (find in GWAS Catalog).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="novel_known_file" class="form-label"><strong>Known Variant Loci File (optional)</strong></label>
+          <input type="file" class="form-control" id="novel_known_file" name="novel_known_file" accept=".tsv,.txt,.csv">
+          <small class="text-muted">Upload file with known loci for comparison (TSV/CSV, headers required). You can use either this or EFO ID.</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="window_size" class="form-label"><strong>Lead Variant Window Size (kb)</strong></label>
+          <input type="number" class="form-control" id="window_size" name="window_size" value="500" min="50" max="5000" step="50">
+          <small class="text-muted">Window size for lead variant grouping (default: 500 kb).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="window_size_novel" class="form-label"><strong>Novelty Window Size (kb)</strong></label>
+          <input type="number" class="form-control" id="window_size_novel" name="window_size_novel" value="1000" min="100" max="10000" step="100">
+          <small class="text-muted">Window size for checking overlap with known loci (default: 1000 kb).</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="sig_level" class="form-label"><strong>Significance Threshold (P-value)</strong></label>
+          <input type="number" class="form-control" id="sig_level" name="sig_level" value="5e-8" step="1e-8" min="1e-12" max="1e-2">
+          <small class="text-muted">Variants below this P-value will be considered significant (default: 5e-8).</small>
+        </div>
+
+        <!-- <div class="mb-3">
+          <label for="build" class="form-label"><strong>Genome Build</strong></label>
+          <select class="form-select" id="build" name="build">
+            <option value="19">GRCh37 (19)</option>
+            <option value="38">GRCh38 (38)</option>
+          </select>
+          <small class="text-muted">Ref genome build for coordinate and annotation.</small>
+        </div> -->
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="only_novel" id="only_novel">
+          <label class="form-check-label" for="only_novel">
+            <strong>Output Only Novel Loci</strong><br>
+            <small class="text-muted">Restrict output to novel loci only (recommended).</small>
+          </label>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="output_known" id="output_known">
+          <label class="form-check-label" for="output_known">
+            <strong>Also Output Known Loci</strong><br>
+            <small class="text-muted">Include reported/known loci in the results file.</small>
+          </label>
+        </div>
+      </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-play me-2"></i>Extract Novel Variants
+    </button>
+  </form>
+
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-extract_novel" class="mt-3" style="display:none;"></div>
+  <!-- Results for this tab (JS will show table or message) -->
+  <div id="result-info-extract_novel" class="mt-3" style="display:none;"></div>
+<!-- Logs -->
+  <div id="log-section-extract_novel" class="mt-3" style="display:none;">
+    <button class="btn btn-sm btn-outline-secondary mb-2" type="button"
+            onclick="toggleLogs('extract_novel')">
+      <i class="fas fa-terminal me-2"></i>View Logs
+    </button>
+    <pre id="log-content-extract_novel" class="bg-dark text-light p-3 rounded"
+        style="max-height:300px; overflow-y:auto; font-size:0.9em; display:none;"></pre>
+  </div>
+
+  <!-- Download section for this tab -->
+  <div id="download-section-extract_novel" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+        <button id="download-zip-extract_novel"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+        <small id="zip-size-extract_novel" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.querySelector('form[data-task="extract_novel"]').addEventListener('submit', function(e) {
+  const efo = this.querySelector('input[name="novel_efo"]').value.trim();
+  const fileInput = this.querySelector('input[name="novel_known_file"]');
+  const fileSelected = fileInput && fileInput.files && fileInput.files.length > 0;
+
+  if ((efo === '' && !fileSelected) || (efo !== '' && fileSelected)) {
+    e.preventDefault();
+    alert('Please provide either an EFO Trait ID or upload a Known Variant Loci file, but not both.');
+    return false;
+  }
+});
+
+</script>

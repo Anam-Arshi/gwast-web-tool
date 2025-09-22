@@ -1,0 +1,32 @@
+<!-- Infer Genome Build -->
+<div class="tab-pane fade" id="infer_genome_build">
+  <h5><i class="fas fa-dna me-2"></i>Infer Genome Build</h5>
+  <p class="text-muted">
+    Infer the reference genome build (GRCh37 vs GRCh38) of your summary statistics using position matching to HapMap3 variants.<br>
+    More reliable with a larger number of variants.
+  </p>
+
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="infer_genome_build">
+    <input type="hidden" name="task" value="infer_genome_build">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Input Summary Statistics File</strong></div>
+      <div class="card-body">
+        <p>
+          Select an uploaded summary statistics file below to infer genome build.
+          (You must upload a file first in the Upload section.)
+        </p>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-search me-2"></i>Infer Genome Build
+    </button>
+  </form>
+
+  <!-- Processing Status for this tab -->
+  <div id="processing-status-infer_genome_build" class="mt-3" style="display:none;"></div>
+  <!-- Results for this tab -->
+  <div id="result-info-infer_genome_build" class="mt-3" style="display:none;"></div>
+  <!-- Download section (not needed for this task) -->
+</div>

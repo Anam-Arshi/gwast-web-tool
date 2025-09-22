@@ -1,0 +1,79 @@
+<!-- Assign CHR/POS using rsID -->
+<div class="tab-pane fade" id="assign_chrpos">
+  <h5><i class="fas fa-map-marker-alt me-2"></i>Assign CHR/POS using rsID</h5>
+  <p class="text-muted">Assign chromosome and base-pair position based on rsID using a reference genome and panel.</p>
+
+  <form method="post" enctype="multipart/form-data" action="run_gwaslab.php" data-task="assign_chrpos">
+    <input type="hidden" name="task" value="assign_chrpos">
+
+    <div class="card mb-3">
+      <div class="card-header"><strong>Assign Options</strong></div>
+      <div class="card-body">
+        
+        <!-- Reference Genome -->
+        <div class="mb-3">
+          <label for="ref_genome" class="form-label"><strong>Genome Build</strong></label>
+          <select class="form-select" name="ref_genome" id="ref_genome" required>
+            <option value="19">hg19 (GRCh37)</option>
+            <option value="38">hg38 (GRCh38)</option>
+          </select>
+          <small class="text-muted">Choose the genome build that matches your summary statistics to assign coordinates</small>
+        </div>
+
+        <!-- Reference Panel -->
+        <div class="mb-3">
+          <label for="ref_panel" class="form-label"><strong>Reference Panel</strong></label>
+          <select class="form-select" name="ref_panel" id="ref_panel" required>
+            <option value="1kg">1000 Genomes</option>
+            <option value="dbsnp">dbSNP</option>
+            
+          </select>
+          <small class="text-muted">Select the reference panel for mapping rsIDs.</small>
+        </div>
+
+       
+
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="background:#B99C6B;border:none;">
+      <i class="fas fa-play me-2"></i>Assign CHR/POS
+    </button>
+  </form>
+
+  <!-- Processing Status -->
+  <div id="processing-status-assign_chrpos" class="mt-3" style="display:none;"></div>
+
+  <!-- Results -->
+  <div id="result-info-assign_chrpos" class="mt-3" style="display:none;"></div>
+
+  <!-- Logs -->
+  <div id="log-section-assign_chrpos" class="mt-3" style="display:none;">
+    <button class="btn btn-sm btn-outline-secondary mb-2" type="button" 
+            onclick="toggleLogs('assign_chrpos')">
+      <i class="fas fa-terminal me-2"></i>View Logs
+    </button>
+    <pre id="log-content-assign_chrpos" class="bg-dark text-light p-3 rounded" 
+        style="max-height:300px; overflow-y:auto; font-size:0.9em; display:none;"></pre>
+  </div>
+
+  <!-- Download section -->
+  <div id="download-section-assign_chrpos" style="display:none;">
+    <div class="card mt-3">
+      <div class="card-body">
+        <div class="download-ready alert alert-info mb-3" style="display:none;"></div>
+
+        <button id="download-zip-assign_chrpos"
+                class="btn btn-outline-primary"
+                type="button"
+                disabled
+                onclick="downloadZip(this)"
+                data-zip="">
+          <i class="fas fa-file-archive me-2"></i>Download All (ZIP)
+        </button>
+
+        <small id="zip-size-assign_chrpos" class="text-muted d-block mt-2"></small>
+      </div>
+    </div>
+  </div>
+</div>
