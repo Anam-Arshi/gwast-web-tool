@@ -11,8 +11,8 @@ if (ini_get("session.use_cookies")) {
 }
 session_destroy();
 
-include("connect.php");
-include('header.php');
+include("../../connect.php");
+include('../../header.php');
 ?>
 
 <style>
@@ -348,4 +348,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-<?php include('footer.php'); ?>
+<?php include('../../footer.php'); ?>

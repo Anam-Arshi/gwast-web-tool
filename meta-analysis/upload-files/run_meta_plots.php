@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 $jobId = $_GET['job'] ?? '';
 $jobId = preg_replace("/[^a-zA-Z0-9_-]/", "", $jobId);
 
-$folder = "user_uploads/$jobId";
+$folder = "../../user_uploads/$jobId";
 $csvFile = "$folder/meta_results.tsv";
 $plotsDir = "$folder/meta_plots";
 

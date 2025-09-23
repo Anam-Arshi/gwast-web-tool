@@ -1,6 +1,6 @@
 <?php
-include("connect.php");
-include('header.php');
+include("../../connect.php");
+include('../../header.php');
 
 
 $dataset = "disease";
@@ -1023,4 +1023,4 @@ $(document).ready(function() {
 } 
 ?>
 
-<?php include('footer.php'); ?>
+<?php include('../../footer.php'); ?>

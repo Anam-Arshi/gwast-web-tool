@@ -8,7 +8,7 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 job_id = sys.argv[1]
-folder = f"user_uploads/{job_id}"
+folder = f"../../user_uploads/{job_id}"
 plot_dir = os.path.join(folder, "meta_plots")
 os.makedirs(plot_dir, exist_ok=True)
 

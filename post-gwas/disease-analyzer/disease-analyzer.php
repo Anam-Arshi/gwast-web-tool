@@ -10,8 +10,8 @@ if (ini_get("session.use_cookies")) {
 }
 session_destroy();
 
-require_once 'connect.php';
-include('header.php'); // Your existing header
+require_once '../../connect.php';
+include('../../header.php'); // Your existing header
 ?>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
@@ -773,4 +773,4 @@ function showAlert(message, type = 'error') {
 }
 </script>
 
-<?php include('footer.php'); // Your existing footer ?>
+<?php include('../../footer.php'); // Your existing footer ?>

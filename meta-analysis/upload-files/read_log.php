@@ -11,7 +11,7 @@ if (!file_exists($logPath)) {
 
 <?php
 $jobId = $_GET['job'] ?? '';
-$logPath = "user_uploads/$jobId/preprocess.log";
+$logPath = "../../user_uploads/$jobId/preprocess.log";
 if (file_exists($logPath)) {
     readfile($logPath);
 } else {

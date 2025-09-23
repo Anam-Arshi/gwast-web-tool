@@ -13,7 +13,7 @@ if (!$jobId || empty($study)) {
     exit;
 }
 
-$basePath = __DIR__ . "/user_uploads/$jobId";
+$basePath = "../../user_uploads/$jobId";
 
     $python = '/home/biomedinfo/gwaslab_env/bin/python'; 
     $cmd = escapeshellcmd("nohup $python extract_leads.py $jobId $windowSize $pval $study");

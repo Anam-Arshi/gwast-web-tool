@@ -1,8 +1,8 @@
 <?php
 ini_set('display_errors', '1');
 error_reporting(E_ALL);
-include("connect.php");
-include('header.php');
+include("../../connect.php");
+include('../../header.php');
 session_start();
 
 // --- 1. DATA RECEPTION AND PREPARATION ---
@@ -413,4 +413,4 @@ $(document).ready(function() {
 </body>
 </html>
 
-<?php include('footer.php'); ?>
+<?php include('../../footer.php'); ?>

@@ -46,7 +46,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 </style>
 
 <?php
-	include "connect.php";
+	include "../../connect.php";
 	header("Set-Cookie: cross-site-cookie=whatever; SameSite=None; Secure");
 	
 
@@ -328,7 +328,7 @@ $genP = array_values($genP_data);
 	unlink($ppi_file_tab);
 	unlink($diamond_out);
 	unlink($random_out);
-	include_once "header.php";
+	include_once "../../header.php";
 ?>
 
 <!-- Include DataTables CSS and JS -->
@@ -839,4 +839,4 @@ $(document).ready(function() {
 });
 </script>
 
-<?php include_once "footer.php"; ?>
+<?php include_once "../../footer.php"; ?>

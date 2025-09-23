@@ -1,12 +1,12 @@
 <?php
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/user_uploads/job_manager_errors.log');
+ini_set('error_log', __DIR__ . '../../user_uploads/job_manager_errors.log');
 error_reporting(E_ALL);
 session_start();
 
 // Debug logging
-file_put_contents(__DIR__ . "/user_uploads/debug_upload.log", json_encode([
+file_put_contents(__DIR__ . "../../user_uploads/debug_upload.log", json_encode([
     '_FILES' => $_FILES,
     '_POST'  => $_POST,
     'error_code' => $_FILES['file']['error'] ?? 'none',

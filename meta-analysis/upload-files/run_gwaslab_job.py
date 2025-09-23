@@ -14,7 +14,7 @@ DEFAULT_FILE_FORMAT = "tsv"
 # ------------------------
 
 job_id = sys.argv[1]
-job_dir = f"user_uploads/{job_id}"
+job_dir = f"../../user_uploads/{job_id}"
 log_file = os.path.join(job_dir, "preprocess.log")
 plots_dir = os.path.join(job_dir, "plots")
 os.makedirs(plots_dir, exist_ok=True)

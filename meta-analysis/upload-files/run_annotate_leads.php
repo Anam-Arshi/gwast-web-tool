@@ -9,7 +9,7 @@ if (!$job_id) {
     exit;
 }
 
-$job_dir = __DIR__ . "/user_uploads/$job_id";
+$job_dir = __DIR__ . "../../user_uploads/$job_id";
 $input_file = "$job_dir/meta_leads.tsv";
 
 if (!file_exists($input_file)) {

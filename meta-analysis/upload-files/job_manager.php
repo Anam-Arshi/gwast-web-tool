@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/user_uploads/job_manager_errors.log');
+ini_set('error_log', '../../user_uploads/job_manager_errors.log');
 error_reporting(E_ALL);
 
 session_start();
@@ -16,7 +16,7 @@ if (!$jobId) {
 }
 
 $upload_time = date("Y-m-d H:i:s");
-$jobDir = "user_uploads/$jobId";
+$jobDir = "../../user_uploads/$jobId";
 
 if (!is_dir($jobDir)) {
     http_response_code(400);

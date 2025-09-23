@@ -5,7 +5,7 @@ if (empty($jobId)) {
     exit('Job ID required');
 }
 
-$jobDir = "user_uploads/" . $jobId;
+$jobDir = "../../user_uploads/" . $jobId;
 $files = [];
 
 if (is_dir($jobDir)) {

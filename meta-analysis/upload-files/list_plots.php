@@ -1,6 +1,6 @@
 <?php
 $jobId = $_GET['job'] ?? '';
-$dir = "user_uploads/$jobId/plots";
+$dir = "../../user_uploads/$jobId/plots";
 $images = [];
 
 if (is_dir($dir)) {

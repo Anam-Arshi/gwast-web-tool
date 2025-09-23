@@ -37,7 +37,7 @@
         <div class="card-body text-center">
           <h5 class="card-title">Disease Analyzer</h5>
           <p class="card-text text-muted">Select and filter disease-associated SNPs for downstream analysis.</p>
-          <a href="disease-analyzer.php" class="btn btn-sm btn-outline-primary" style="color: #B99C6B; border-color: #B99C6B;">View</a>
+          <a href="post-gwas/disease-analyzer/disease-analyzer.php" class="btn btn-sm btn-outline-primary" style="color: #B99C6B; border-color: #B99C6B;">View</a>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
         <div class="card-body text-center">
           <h5 class="card-title">SNP Analyzer</h5>
           <p class="card-text text-muted">Examine SNP-level details and mapped gene links across studies.</p>
-          <a href="snp-input.php" class="btn btn-sm btn-outline-primary" style="color: #B99C6B; border-color: #B99C6B;">View</a>
+          <a href="post-gwas/snp-analyzer/snp-input.php" class="btn btn-sm btn-outline-primary" style="color: #B99C6B; border-color: #B99C6B;">View</a>
         </div>
       </div>
     </div>
@@ -57,7 +57,7 @@
         <div class="card-body text-center">
           <h5 class="card-title">Gene Analyzer</h5>
           <p class="card-text text-muted">Perform gene-based and pathway-level enrichment analysis.</p>
-          <a href="geneAnalyzer.php" class="btn btn-sm btn-outline-primary" style="color: #B99C6B; border-color: #B99C6B;">View</a>
+          <a href="post-gwas/gene-analyzer/gene-input.php" class="btn btn-sm btn-outline-primary" style="color: #B99C6B; border-color: #B99C6B;">View</a>
         </div>
       </div>
     </div>

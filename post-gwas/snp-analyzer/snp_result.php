@@ -1,6 +1,6 @@
 <?php
 
-include("connect.php");
+include("../../connect.php");
 session_start();
 
 // Session cleanup code...
@@ -23,7 +23,7 @@ $snp_quoted = array_map(function($value) {
 }, $lst_snp);
 
 $snpLst = "(".implode(",", $snp_quoted). ")";
-include('header.php');
+include('../../header.php');
 ?>
 
 <!-- Include DataTables and Select2 CSS and JS -->
@@ -960,4 +960,4 @@ $('#analysisForm').on('submit', function(e) {
 });
 </script>
 
-<?php include('footer.php'); ?>
+<?php include('../../footer.php'); ?>

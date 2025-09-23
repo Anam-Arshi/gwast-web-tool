@@ -138,10 +138,10 @@ options(future.globals.maxSize = 10000 * 1024^2)  # 10 GB
     # Get job folder from command line arguments
   args <- commandArgs(TRUE)
   folderN <- args[1]
-  cat("Working directory: ", paste0("user_uploads/", folderN), "\n")
+  cat("Working directory: ", paste0("../../user_uploads/", folderN), "\n")
 
   # Set working directory to user_uploads/<job>
-  setwd(paste0("user_uploads/", folderN))
+  setwd(paste0("../../user_uploads/", folderN))
 
   # Read meta_input.json
   meta_input_path <- file.path(getwd(), "meta_input.json")

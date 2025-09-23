@@ -2,7 +2,7 @@
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
-include("connect.php");
+include("../../connect.php");
 session_start();
 
 // Session cleanup
@@ -82,7 +82,7 @@ $pos_quoted = array_map(function($value) {
 }, $pos_only);
 $posq = "(" . implode(",", $pos_quoted) . ")";
 
-include('header.php');
+include('../../header.php');
 ?>
 <!-- Include DataTables CSS and JS -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
@@ -933,4 +933,4 @@ $(document).ready(function() {
 
 
 
-<?php include('footer.php'); ?>
+<?php include('../../footer.php'); ?>

@@ -11,7 +11,7 @@ if (!isset($data['jobId']) || empty($data['jobId'])) {
 }
 
 $jobId  = basename($data['jobId']); // sanitize
-$folder = "user_uploads/$jobId";
+$folder = "../../user_uploads/$jobId";
 
 // Ensure folder exists
 if (!is_dir($folder)) {

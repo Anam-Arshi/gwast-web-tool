@@ -3,7 +3,7 @@
 $jobId = isset($jobId) ? $jobId : (isset($jobId_safe) ? $jobId_safe : null);
 if (!$jobId) { echo "<p style='color:red;'>Missing job id.</p>"; return; }
 
-$jobDir = "user_uploads/$jobId";
+$jobDir = "../../user_uploads/$jobId";
 $configFile = "$jobDir/job_config.json";
 
 if (!file_exists($configFile)) {

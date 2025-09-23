@@ -14,7 +14,7 @@ if (ini_get("session.use_cookies")) {
 }
 
 session_destroy();
-include("connect.php");
+include("../../connect.php");
 
 $snpid = $_POST["snpid"];
 $snpid = preg_replace("/\s\s+/", " ", $snpid);
@@ -29,7 +29,7 @@ $snp_quoted = array_map(function($value) {
 
 $snpLst = "(".implode(",", $snp_quoted). ")"; 
 
-include('header.php');
+include('../../header.php');
 ?>
 
 <!-- Include DataTables and Select2 CSS and JS -->
@@ -1105,4 +1105,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php include('footer.php'); ?>
+<?php include('../../footer.php'); ?>
